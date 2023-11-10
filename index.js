@@ -12,14 +12,6 @@ client.on('qr', qr => {
 
 client.on('ready', async () => {
     console.log('Session is operational!')
-
-    // const chat = await client.getChatById('554788303706@c.us')
-    // console.log(chat)
-    // const messages = await chat.fetchMessages();
-    // console.log(messages);
-    // const x = await messages[0].downloadMedia()
-    // console.log(x)
-    // fs.writeFileSync(`${Math.random().toString()}.jpg`, x.data, {encoding: 'base64'})
 });
 
 client.on('message_create', async (msg) => {
