@@ -1,5 +1,8 @@
 .wwebjs_cache
 .wwebjs_auth
 node_modules
-vol/*
-!vol/.keep
+
+vol/**/*
+!vol/images
+!vol/images/.keep
+vol/images/*.jpg
