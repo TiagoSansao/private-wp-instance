@@ -1,7 +1,9 @@
-import fs from fs;
+import fs from 'fs';
 import qrcode from 'qrcode-terminal'
+import wpjs from 'whatsapp-web.js'
 
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth } = wpjs;
+
 const client = new Client({authStrategy: new LocalAuth()});
 
 client.on('qr', qr => {
@@ -35,4 +37,5 @@ client.on('message_create', async (msg) => {
   fs.writeFileSync(path, media.data, {encoding: 'base64'})
 })
 
+console.log('Initializing wp session...')
 client.initialize();
