@@ -1,6 +1,15 @@
+import { Console } from 'console';
 import fs from 'fs';
 import qrcode from 'qrcode-terminal'
 import wpjs from 'whatsapp-web.js'
+
+const mediaTypeMap = {
+  "audio/ogg; codecs=opus": ".ogg",
+  "image/jpeg": ".jpeg",
+  "image/png": ".png",
+  "image/gif": ".gif",
+  "video/mp4": ".mp4"
+}
 
 const { Client, LocalAuth } = wpjs;
 
@@ -28,13 +37,40 @@ client.on('message_create', async (msg) => {
 
   if (!msg.hasMedia) return;
 
-  const media = await msg.downloadMedia()
 
-  const dirPath = 'vol/images/';
-  const filename = `${new Date().toISOString()}.jpg`;
-  const path = dirPath + filename;
-  
-  fs.writeFileSync(path, media.data, {encoding: 'base64'})
+  try {
+    const media = await msg.downloadMedia();
+    const folder = msg.type;
+    const dirPath = `vol/${folder}/`;
+    let fileExtension = mediaTypeMap[media.mimetype];
+
+    if (!fileExtension) {
+      switch (msg.type) {
+        case 'audio':
+          fileExtension = '.ogg';
+          break;
+        case 'image':
+          fileExtension = '.jpeg';
+          break;
+        case 'video':
+          fileExtension = '.mp4';
+          break;
+        default: 
+          fileExtension = '.unknown'
+          break;
+      }
+    }
+
+    const filename = new Date().toISOString();
+    const path = dirPath + filename + fileExtension;
+
+    if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath);
+
+    fs.writeFileSync(path, media.data, {encoding: 'base64'})
+  } catch (error) {
+    console.log('Captured error.')
+    console.error(error);
+  }
 })
 
 console.log('Initializing wp session...')
