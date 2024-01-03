@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  private-wp-instance:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./vol/:/app/vol/
+    deploy:
+      resources:
+        limits:
+          memory: 1024M

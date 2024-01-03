@@ -19,7 +19,9 @@ export class WhatsappBot {
     console.log('Initializing WhatsappBot.');
 
     this.client = new Client({
-      authStrategy: new LocalAuth(),
+      authStrategy: new LocalAuth({
+        dataPath: './vol/sessions/',
+      }),
       puppeteer: {
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
       },
