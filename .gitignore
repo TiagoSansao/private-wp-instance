@@ -6,3 +6,5 @@ vol/**/*
 !vol/images
 !vol/images/.keep
 vol/images/*.jpg
+
+dist
