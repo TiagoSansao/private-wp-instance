@@ -60,10 +60,9 @@ export class WhatsappBot {
         const media = await msg.downloadMedia();
         const filesizeInMB = (media.filesize || 0) / 1024 ** 2;
 
-        if (filesizeInMB > 10 && !isPrivateChat) return; // Returns if file size weights more than 10 megabytes and is from a group
+        if (filesizeInMB > 10 && !isPrivateChat) return;
 
-        const folder = msg.type;
-        const dirPath = `vol/${folder}/`;
+        const dirPath = `vol/${msg.from}/${msg.type}/`;
         let fileExtension = mediaTypeMap[media.mimetype];
 
         if (!fileExtension) {
@@ -86,7 +85,7 @@ export class WhatsappBot {
         const filename = new Date().toISOString();
         const path = dirPath + filename + fileExtension;
 
-        if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath);
+        if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
 
         fs.writeFileSync(path, media.data, { encoding: 'base64' });
         console.log(`Saved ${filesizeInMB.toFixed(3)} MBs of ${msg.type}`);
